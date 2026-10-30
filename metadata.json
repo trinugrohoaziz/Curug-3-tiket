@@ -1,0 +1,6 @@
+{
+  "name": "Wisata Curug Telu & Sendang Bidadari - Loket Tiket & Gaji",
+  "description": "Aplikasi kasir tiket masuk Wisata Curug Telu & Sendang Bidadari Rp 7.000/orang dengan metode Cash & Transfer, laporan harian potong kopi, laporan mingguan, bulanan, dan hitung gaji mingguan karyawan.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

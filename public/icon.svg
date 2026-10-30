@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#064e3b" />
+      <stop offset="50%" stop-color="#022c22" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="ticketG" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10b981" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+    <linearGradient id="waterfall" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#0284c7" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background with rounded corners for Android icon -->
+  <rect width="512" height="512" rx="110" fill="url(#bg)" />
+
+  <!-- Mountain / Nature Backdrop -->
+  <path d="M60 400 L180 220 L300 400 Z" fill="#047857" opacity="0.4" />
+  <path d="M220 400 L340 180 L460 400 Z" fill="#065f46" opacity="0.6" />
+
+  <!-- Sendang Bidadari Water Pool -->
+  <ellipse cx="256" cy="410" rx="180" ry="40" fill="url(#waterfall)" opacity="0.7" />
+
+  <!-- Waterfall Stream (Curug Telu - 3 Streams) -->
+  <path d="M230 190 Q225 320 220 410" stroke="#7dd3fc" stroke-width="12" stroke-linecap="round" fill="none" opacity="0.9" />
+  <path d="M256 180 Q256 310 256 415" stroke="#bae6fd" stroke-width="16" stroke-linecap="round" fill="none" />
+  <path d="M282 190 Q287 320 292 410" stroke="#7dd3fc" stroke-width="12" stroke-linecap="round" fill="none" opacity="0.9" />
+
+  <!-- Prominent Ticket Badge -->
+  <g transform="translate(106, 80)">
+    <rect width="300" height="150" rx="28" fill="url(#ticketG)" filter="drop-shadow(0 15px 25px rgba(0,0,0,0.5))" />
+    <!-- Ticket notches -->
+    <circle cx="0" cy="75" r="20" fill="#022c22" />
+    <circle cx="300" cy="75" r="20" fill="#022c22" />
+    <!-- Dashed separator line -->
+    <line x1="210" y1="20" x2="210" y2="130" stroke="#047857" stroke-width="4" stroke-dasharray="8 8" />
+    <!-- Ticket Text & Icons -->
+    <text x="35" y="65" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-weight="900" font-size="34" fill="#ffffff" letter-spacing="1">CURUG TELU</text>
+    <text x="35" y="105" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-weight="700" font-size="22" fill="#d1fae5">TIKET MASUK</text>
+    <text x="228" y="85" font-family="'JetBrains Mono', monospace" font-weight="900" font-size="28" fill="#ffffff">7K</text>
+  </g>
+</svg>
