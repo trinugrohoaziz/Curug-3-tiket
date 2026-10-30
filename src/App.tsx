@@ -184,6 +184,12 @@ export default function App() {
           onSaveConfig={handleSaveConfig}
           onResetData={handleResetData}
           onLoadDemoData={handleLoadDemoData}
+          onDataImported={() => {
+            setTransactions(getStoredTransactions());
+            setDailyRecords(getStoredDailyRecords());
+            setConfig(getStoredConfig());
+            setEmployees(getStoredEmployees());
+          }}
         />
       )}
 

@@ -532,3 +532,81 @@ export const loadDemoSampleData = (): {
 export const resetAllData = (): void => {
   clearAllDataToEmpty();
 };
+
+export interface LocalDatabaseStats {
+  transactionsCount: number;
+  recordsCount: number;
+  employeesCount: number;
+  storageSizeKb: number;
+  isOfflineCapable: boolean;
+  lastBackupDate?: string;
+}
+
+export const getLocalDatabaseStats = (): LocalDatabaseStats => {
+  const trx = getStoredTransactions();
+  const records = getStoredDailyRecords();
+  const employees = getStoredEmployees();
+
+  let totalBytes = 0;
+  for (const key of Object.values(STORAGE_KEYS)) {
+    const item = localStorage.getItem(key);
+    if (item) {
+      totalBytes += item.length * 2; // UTF-16 approximate
+    }
+  }
+
+  return {
+    transactionsCount: trx.length,
+    recordsCount: Object.keys(records).length,
+    employeesCount: employees.length,
+    storageSizeKb: Math.max(1, Math.round(totalBytes / 1024)),
+    isOfflineCapable: true,
+  };
+};
+
+export const exportLocalDataToJson = (): string => {
+  const data = {
+    version: '1.0',
+    exportDate: new Date().toISOString(),
+    appName: 'Wisata Curug Telu & Sendang Bidadari',
+    config: getStoredConfig(),
+    employees: getStoredEmployees(),
+    transactions: getStoredTransactions(),
+    dailyRecords: Object.values(getStoredDailyRecords()),
+  };
+  return JSON.stringify(data, null, 2);
+};
+
+export const importLocalDataFromJson = (
+  jsonContent: string
+): { success: boolean; message: string; count?: number } => {
+  try {
+    const data = JSON.parse(jsonContent);
+    if (!data.transactions || !Array.isArray(data.transactions)) {
+      return {
+        success: false,
+        message: 'Format file tidak valid. Pastikan memilih file cadangan Curug Telu.',
+      };
+    }
+
+    if (data.config) saveStoredConfig(data.config);
+    if (data.employees && Array.isArray(data.employees)) saveStoredEmployees(data.employees);
+    saveStoredTransactions(data.transactions);
+
+    if (data.dailyRecords && Array.isArray(data.dailyRecords)) {
+      saveStoredDailyRecords(data.dailyRecords);
+    }
+
+    return {
+      success: true,
+      message: `Berhasil memulihkan ${data.transactions.length} transaksi dari file lokal!`,
+      count: data.transactions.length,
+    };
+  } catch (err) {
+    console.error('Import failed', err);
+    return {
+      success: false,
+      message: 'Gagal membaca isi file JSON cadangan. File mungkin rusak.',
+    };
+  }
+};

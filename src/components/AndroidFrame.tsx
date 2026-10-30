@@ -6,13 +6,16 @@ import {
   Coins,
   Settings,
   Wifi,
+  WifiOff,
   BatteryCharging,
   Smartphone,
   Maximize2,
   TreePine,
+  HardDrive,
 } from 'lucide-react';
 import { TouristSpotConfig } from '../types';
 import { AndroidInstallModal } from './AndroidInstallModal';
+import { useOnlineStatus } from '../hooks/useOnlineStatus';
 
 export type NavTab = 'pos' | 'guests' | 'reports' | 'payroll' | 'settings';
 
@@ -33,9 +36,11 @@ export const AndroidFrame: React.FC<AndroidFrameProps> = ({
   todayTicketsCount,
   children,
 }) => {
+  const isOnline = useOnlineStatus();
   const [currentTime, setCurrentTime] = useState<string>('08:00');
   const [isPhoneFrame, setIsPhoneFrame] = useState<boolean>(false);
   const [showInstallModal, setShowInstallModal] = useState<boolean>(false);
+  const [dismissOfflineBanner, setDismissOfflineBanner] = useState<boolean>(false);
 
   useEffect(() => {
     const updateTime = () => {
@@ -132,10 +137,21 @@ export const AndroidFrame: React.FC<AndroidFrameProps> = ({
           {/* Android Camera Punch Hole / Speaker Notch */}
           <div className="w-3.5 h-3.5 rounded-full bg-black border border-slate-800/80 shadow-inner"></div>
           <div className="flex items-center gap-2 text-slate-300">
-            <span className="text-[10px] font-bold tracking-tighter text-emerald-400">
-              4G+
-            </span>
-            <Wifi className="w-3.5 h-3.5" />
+            {isOnline ? (
+              <span className="text-[10px] font-bold tracking-tighter text-emerald-400 flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block animate-pulse"></span>
+                4G+
+              </span>
+            ) : (
+              <span className="text-[10px] font-bold tracking-tighter text-amber-400 bg-amber-950/60 border border-amber-800/60 px-1 rounded">
+                OFFLINE (LOKAL)
+              </span>
+            )}
+            {isOnline ? (
+              <Wifi className="w-3.5 h-3.5 text-slate-300" />
+            ) : (
+              <WifiOff className="w-3.5 h-3.5 text-amber-400" />
+            )}
             <div className="flex items-center gap-0.5">
               <span className="text-[10px] font-mono">98%</span>
               <BatteryCharging className="w-3.5 h-3.5 text-emerald-400" />
@@ -153,10 +169,15 @@ export const AndroidFrame: React.FC<AndroidFrameProps> = ({
               <h1 className="text-sm font-bold text-white tracking-tight flex items-center gap-1.5 leading-tight">
                 {config.spotName}
               </h1>
-              <p className="text-[11px] text-emerald-300/80 font-medium">
-                {config.cashierName} •{' '}
+              <div className="flex items-center gap-1.5 text-[11px] text-emerald-300/80 font-medium">
+                <span>{config.cashierName}</span>
+                <span>•</span>
                 <span className="text-emerald-400 font-bold">Rp 7.000</span>
-              </p>
+                <span>•</span>
+                <span className="text-[10px] bg-emerald-950/80 text-emerald-300 border border-emerald-700/40 px-1 py-0.2 rounded flex items-center gap-0.5">
+                  <HardDrive className="w-2.5 h-2.5" /> 100% Lokal
+                </span>
+              </div>
             </div>
           </div>
 
@@ -171,6 +192,24 @@ export const AndroidFrame: React.FC<AndroidFrameProps> = ({
             </button>
           </div>
         </div>
+
+        {/* Offline Notification Banner (Shown when no internet) */}
+        {!isOnline && !dismissOfflineBanner && (
+          <div className="bg-amber-950/90 border-b border-amber-800/60 px-3.5 py-1.5 flex items-center justify-between text-[11px] text-amber-200 shrink-0">
+            <div className="flex items-center gap-1.5">
+              <WifiOff className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+              <span>
+                <strong>Mode Offline Aktif:</strong> Berjalan 100% di memori HP Anda tanpa sinyal/kuota.
+              </span>
+            </div>
+            <button
+              onClick={() => setDismissOfflineBanner(true)}
+              className="text-amber-400 font-bold text-xs hover:text-white px-1 ml-2"
+            >
+              ✕
+            </button>
+          </div>
+        )}
 
         {/* Scrollable View Content */}
         <div className="flex-1 overflow-y-auto overflow-x-hidden relative flex flex-col bg-slate-950">
